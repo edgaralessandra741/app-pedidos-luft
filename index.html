@@ -36,16 +36,8 @@
       object-fit: contain;
       border-radius: 8px;
     }
-    .logo h1 { 
-      color: #1e3c72; 
-      font-size: 1.8rem;
-      margin: 0;
-    }
-    .logo p { 
-      color: #666; 
-      font-size: 0.95rem; 
-      margin: 0;
-    }
+    .logo h1 { color: #1e3c72; font-size: 1.8rem; margin: 0; }
+    .logo p { color: #666; font-size: 0.95rem; margin: 0; }
     
     .form-group { margin-bottom: 1.5rem; }
     .form-group label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600; }
@@ -55,13 +47,7 @@
     }
     .form-group input:focus { border-color: #1e3c72; outline: none; box-shadow: 0 0 0 3px rgba(30,60,114,0.1); }
     
-    /* Estilo da instrução abaixo da senha */
-    .login-hint {
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      color: #000;
-      font-weight: 500;
-    }
+    .login-hint { margin-top: 0.5rem; font-size: 0.95rem; color: #000; font-weight: 500; }
     
     .btn { 
       width: 100%; padding: 14px; background: #1e3c72; color: white; 
@@ -81,21 +67,11 @@
     /* App Principal */
     .app-header { 
       display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 1rem; border-bottom: 2px solid #eee; margin-bottom: 1.5rem;
-      gap: 1rem;
+      padding-bottom: 1rem; border-bottom: 2px solid #eee; margin-bottom: 1.5rem; gap: 1rem;
     }
-    .header-left {
-      display: flex; align-items: center; gap: 1rem; flex: 1;
-    }
-    .company-logo {
-      max-height: 60px;
-      max-width: 150px;
-      object-fit: contain;
-      border-radius: 8px;
-    }
-    .header-text h2 { 
-      color: #1e3c72; font-size: 1.4rem; margin-bottom: 0.3rem;
-    }
+    .header-left { display: flex; align-items: center; gap: 1rem; flex: 1; }
+    .company-logo { max-height: 60px; max-width: 150px; object-fit: contain; border-radius: 8px; }
+    .header-text h2 { color: #1e3c72; font-size: 1.4rem; margin-bottom: 0.3rem; }
     .user-info { font-size: 0.85rem; color: #666; }
     .user-info strong { color: #1e3c72; }
     
@@ -110,52 +86,41 @@
     .status-msg { text-align: center; color: #666; font-size: 0.9rem; margin: 1rem 0; }
     
     /* Cards */
-    .order-card { 
-      background: #f8fafc; border-radius: 16px; padding: 0; 
-      overflow: hidden; border: 1px solid #e2e8f0;
-    }
-    
+    .order-card { background: #f8fafc; border-radius: 16px; padding: 0; overflow: hidden; border: 1px solid #e2e8f0; }
     .order-header { 
       display: flex; justify-content: space-between; align-items: center; 
-      padding: 1.2rem 1.5rem; 
-      border-bottom: 2px solid #1e3c72; background: #fff;
+      padding: 1.2rem 1.5rem; border-bottom: 2px solid #1e3c72; background: #fff;
     }
-    .order-header h3 { 
-      color: #1e3c72; font-size: 1.3rem; display: flex; align-items: center; gap: 8px;
-    }
-    .order-badge { 
-      background: #1e3c72; color: white; padding: 6px 16px; 
-      border-radius: 20px; font-size: 0.85rem; font-weight: 600;
-    }
+    .order-header h3 { color: #1e3c72; font-size: 1.3rem; display: flex; align-items: center; gap: 8px; }
+    .order-badge { background: #1e3c72; color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
     
-    .order-grid { 
-      padding: 1.2rem;
-      display: grid; 
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px; 
-    }
+    .order-grid { padding: 1.2rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
     
     .order-field { 
       background: white; padding: 12px; border-radius: 8px; 
-      border-left: 4px solid #1e3c72; 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border-left: 4px solid #1e3c72; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
     }
+    .order-field:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
     
     .order-field label { 
-      display: flex; align-items: center; gap: 6px;
-      font-size: 0.75rem; color: #666; text-transform: uppercase; 
-      font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px;
+      display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: #666; 
+      text-transform: uppercase; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px;
     }
-    
-    .order-field .value { 
-      font-size: 1rem; color: #1e3c72; font-weight: 700; 
-    }
+    .order-field .value { font-size: 1rem; color: #1e3c72; font-weight: 700; }
     .order-field .value.empty { color: #999; font-style: italic; }
+    
+    /* Card de horas em destaque */
+    .order-field.destaque {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-left: 4px solid #5a67d8;
+    }
+    .order-field.destaque label { color: white; }
+    .order-field.destaque .value { color: white; font-size: 1.2rem; }
     
     .logout-btn { 
       background: #ef4444; padding: 8px 16px; font-size: 0.9rem; border-radius: 6px; 
-      color: white; border: none; cursor: pointer; transition: background 0.3s;
-      white-space: nowrap;
+      color: white; border: none; cursor: pointer; transition: background 0.3s; white-space: nowrap;
     }
     .logout-btn:hover { background: #dc2626; }
     
@@ -168,15 +133,10 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    .empty-state { 
-      text-align: center; padding: 3rem 1rem; color: #999; 
-      background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1;
-    }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #999; background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1; }
     .empty-state h4 { color: #666; margin: 1rem 0 0.5rem; }
     
-    @media (max-width: 900px) {
-      .order-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 900px) { .order-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) {
       .order-grid { grid-template-columns: 1fr; }
       .container { padding: 1.5rem; }
@@ -192,55 +152,43 @@
 </head>
 <body>
   <div class="container">
-    
-    <!-- 🔐 TELA DE LOGIN -->
     <div id="loginScreen" class="screen active">
       <div class="logo">
-        <!-- ✅ LOGO DA LUFT SOLUTIONS -->
         <img src="https://i.ibb.co/d4F0rY97/luft-solutions-logo.jpg" alt="Luft Solutions" class="logo-img">
         <h1>Luft Solutions</h1>
         <p>Consulta de Pedidos</p>
       </div>
-      
       <div id="loginError" class="error">❌ Senha inválida!</div>
-      
       <form id="loginForm">
         <div class="form-group">
           <label for="passwordInput">Senha de Acesso</label>
           <input type="password" id="passwordInput" required placeholder="Digite sua senha" autocomplete="current-password">
           <p class="login-hint">Senha e os 5 primeiro número do CNPJ Ex: 76512</p>
         </div>
-        <button type="submit" class="btn" id="loginBtn"> Acessar Pedidos</button>
+        <button type="submit" class="btn" id="loginBtn">Acessar Pedidos</button>
       </form>
       <div id="loginStatus" style="text-align:center;margin-top:1rem;color:#666;font-size:0.9rem;"></div>
     </div>
 
-    <!--  TELA PRINCIPAL -->
     <div id="appScreen" class="screen">
       <div class="app-header">
         <div class="header-left">
           <img id="headerLogo" src="" alt="Logo" class="company-logo" style="display: none;" onerror="this.style.display='none'">
           <div class="header-text">
             <h2>📦 Meus Pedidos</h2>
-            <div class="user-info">
-              Depositante: <strong id="userDepositante">Carregando...</strong>
-            </div>
+            <div class="user-info">Depositante: <strong id="userDepositante">Carregando...</strong></div>
           </div>
         </div>
         <button class="logout-btn" id="logoutBtn">Sair</button>
       </div>
-      
       <div class="search-box">
         <input type="text" id="pedidoInput" placeholder="Digite o número do pedido para consultar..." />
         <button class="btn" id="searchBtn">🔍 Consultar</button>
       </div>
-      
       <div id="status" class="status-msg"></div>
       <div id="results"></div>
-      
-      <button class="btn" id="clearBtn" style="margin-top:1rem;background:#6c757d;"> Nova Consulta</button>
+      <button class="btn" id="clearBtn" style="margin-top:1rem;background:#6c757d;">🔄 Nova Consulta</button>
     </div>
-
   </div>
 
   <script>
@@ -292,20 +240,14 @@
         if (!response.ok) throw new Error('Falha na autenticação');
         const csvText = await response.text();
         const data = parseCSV(csvText);
-        
         const user = data.find(row => {
           const senhaPlanilha = (row['senha'] || '').trim();
           const senhaDigitada = password.trim();
           return senhaPlanilha === senhaDigitada;
         });
-        
         if (user) {
           logoUrl = formatLogoUrl(user['Logo Tipo'] || '');
-          return { 
-            depositante: (user['Depositante'] || '').trim(), 
-            senha: password,
-            logo: logoUrl
-          };
+          return { depositante: (user['Depositante'] || '').trim(), senha: password, logo: logoUrl };
         }
         return null;
       } catch (err) {
@@ -322,7 +264,7 @@
         baseData = parseCSV(csvText);
         return true;
       } catch (err) {
-        console.error(' Erro load base:', err);
+        console.error('Erro load base:', err);
         return false;
       }
     }
@@ -342,52 +284,80 @@
       return value;
     }
 
+    // ✅ FUNÇÃO ATUALIZADA: Calcula horas ou usa horário atual se Expedido Em estiver vazio
+    function calcularHorasProcesso(ondaGerada, expedidoEm) {
+      if (!ondaGerada || ondaGerada === '-') return '-';
+
+      // Se expedidoEm estiver vazio, usa data/hora atual
+      let fim = expedidoEm;
+      if (!expedidoEm || expedidoEm === '-' || expedidoEm.trim() === '') {
+        const now = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        fim = `${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      }
+
+      try {
+        const [dataOnda, horaOnda] = ondaGerada.split(' ');
+        const [dataFim, horaFim] = fim.split(' ');
+        const [d1, m1, y1] = dataOnda.split('/');
+        const [d2, m2, y2] = dataFim.split('/');
+
+        const inicio = new Date(`${y1}-${m1}-${d1}T${horaOnda}`);
+        const fimDate = new Date(`${y2}-${m2}-${d2}T${horaFim}`);
+        const diff = fimDate - inicio;
+        if (diff < 0) return '-';
+
+        const h = Math.floor(diff / 3600000);
+        const min = Math.floor((diff % 3600000) / 60000);
+        return `${String(h).padStart(2,'0')}:${String(min).padStart(2,'0')}`;
+      } catch (e) {
+        console.error('Erro ao calcular horas:', e);
+        return '-';
+      }
+    }
+
     function renderOrder(order) {
       const container = document.getElementById('results');
       if (!order) {
-        container.innerHTML = `<div class="empty-state"><h4> Pedido não encontrado</h4><p>Verifique o número e tente novamente.</p></div>`;
+        container.innerHTML = `<div class="empty-state"><h4>📭 Pedido não encontrado</h4><p>Verifique o número e tente novamente.</p></div>`;
         return;
       }
 
       const fields = [
-        { key: 'Status NF', label: 'Status NF', icon: '📋' },
-        { key: 'Qtde SKUs', label: 'Qtde SKUs', icon: '' },
-        { key: 'Qtde Peças', label: 'Qtde Peças', icon: '📚' },
-        { key: 'Qtde Volumes', label: 'Qtde Volumes', icon: '📦' },
-        { key: 'Importado Em', label: 'Importado Em', icon: '⌛', format: 'datetime' },
-        { key: 'Onda Gerada Em', label: 'Onda Gerada Em', icon: '🌊', format: 'datetime' },
-        { key: '% Separado', label: '% Separado', icon: '📊' },
-        { key: 'Separado Em', label: 'Separado Em', icon: '✅', format: 'datetime' },
-        { key: '% Conferido', label: '% Conferido', icon: '📊' },
-        { key: 'Conferido Em', label: 'Conferido Em', icon: '✔️', format: 'datetime' },
+        { key: 'Status NF', label: 'Status NF', icon: '🧾' },
+        { key: 'Qtde SKUs', label: 'Qtde SKUs', icon: '🏷️' },
+        { key: 'Qtde Peças', label: 'Qtde Peças', icon: '🧩' },
+        { key: 'Qtde Volumes', label: 'Qtde Volumes', icon: '📮' },
+        { key: 'Importado Em', label: 'Importado Em', icon: '📥', format: 'datetime' },
+        { key: 'Onda Gerada Em', label: 'Onda Gerada Em', icon: '', format: 'datetime' },
+        { key: '% Separado', label: '% Separado', icon: '📈' },
+        { key: 'Separado Em', label: 'Separado Em', icon: '✂️', format: 'datetime' },
+        { key: '% Conferido', label: '% Conferido', icon: '🔍' },
+        { key: 'Conferido Em', label: 'Conferido Em', icon: '️', format: 'datetime' },
         { key: 'Pesado Em', label: 'Pesado Em', icon: '⚖️', format: 'datetime' },
-        { key: 'Faturado Em', label: 'Faturado Em', icon: '💰', format: 'datetime' },
-        { key: 'Status', label: 'Status Geral', icon: '' },
-        { key: 'Expedido Em', label: 'Expedido Em', icon: '🚚', format: 'datetime' }
+        { key: 'Faturado Em', label: 'Faturado Em', icon: '💵', format: 'datetime' },
+        { key: 'Status', label: 'Status Geral', icon: '🚦' },
+        { key: 'Expedido Em', label: 'Expedido Em', icon: '🚀', format: 'datetime' },
+        { 
+          key: 'somaHoras', 
+          label: 'SOMA DE HORAS EM PROCESSO', 
+          icon: '️',
+          destaque: true,
+          customValue: (o) => calcularHorasProcesso(o['Onda Gerada Em'], o['Expedido Em'])
+        }
       ];
 
-      let html = `
-        <div class="order-card">
-          <div class="order-header">
-            <h3> Pedido ${order['Pedido'] || 'N/A'}</h3>
-            <div class="order-badge">${order['Depositante'] || ''}</div>
-          </div>
-          <div class="order-grid">
-      `;
+      let html = `<div class="order-card"><div class="order-header"><h3>📦 Pedido ${order['Pedido'] || 'N/A'}</h3><div class="order-badge">${order['Depositante'] || ''}</div></div><div class="order-grid">`;
 
-      fields.forEach(field => {
-        let value = (order[field.key] || '-').trim();
-        if (field.format === 'datetime' && value !== '-') {
-          value = formatDateTime(value) || '-';
+      fields.forEach(f => {
+        let val = '-';
+        if (f.customValue) val = f.customValue(order);
+        else {
+          val = (order[f.key] || '-').trim();
+          if (f.format === 'datetime' && val !== '-') val = formatDateTime(val) || '-';
         }
-        const hasValue = value && value !== '-';
-        
-        html += `
-          <div class="order-field">
-            <label>${field.icon} ${field.label}</label>
-            <div class="value ${hasValue ? '' : 'empty'}">${value}</div>
-          </div>
-        `;
+        const has = val && val !== '-';
+        html += `<div class="order-field ${f.destaque ? 'destaque' : ''}"><label>${f.icon} ${f.label}</label><div class="value ${has ? '' : 'empty'}">${val}</div></div>`;
       });
 
       html += '</div></div>';
@@ -400,9 +370,7 @@
     }
 
     function doLogout() {
-      currentUser = null;
-      baseData = [];
-      logoUrl = '';
+      currentUser = null; baseData = []; logoUrl = '';
       localStorage.removeItem('luft_user_session');
       document.getElementById('passwordInput').value = '';
       document.getElementById('pedidoInput').value = '';
@@ -419,40 +387,25 @@
       const password = document.getElementById('passwordInput').value;
       const btn = document.getElementById('loginBtn');
       const status = document.getElementById('loginStatus');
-      
       document.getElementById('loginError').classList.remove('show');
       btn.disabled = true;
       status.innerHTML = '<span class="spinner"></span>Verificando senha...';
       
       const user = await validatePassword(password);
-      
       if (user) {
         currentUser = user;
-        localStorage.setItem('luft_user_session', JSON.stringify({ 
-          depositante: user.depositante, 
-          logo: user.logo,
-          timestamp: Date.now() 
-        }));
-        
+        localStorage.setItem('luft_user_session', JSON.stringify({ depositante: user.depositante, logo: user.logo, timestamp: Date.now() }));
         status.textContent = '✅ Autenticado! Carregando pedidos...';
-        
         const logoImg = document.getElementById('headerLogo');
-        if (user.logo && user.logo.trim() !== '') {
-          logoImg.src = user.logo;
-          logoImg.style.display = 'block';
-        } else {
-          logoImg.style.display = 'none';
-        }
+        if (user.logo && user.logo.trim() !== '') { logoImg.src = user.logo; logoImg.style.display = 'block'; }
+        else { logoImg.style.display = 'none'; }
         
         const ok = await loadBaseData();
         if (ok) {
           document.getElementById('userDepositante').textContent = user.depositante;
           document.getElementById('pedidoInput').focus();
           showScreen('appScreen');
-        } else {
-          status.textContent = '⚠️ Erro ao carregar base.';
-          btn.disabled = false;
-        }
+        } else { status.textContent = '⚠️ Erro ao carregar base.'; btn.disabled = false; }
       } else {
         document.getElementById('loginError').classList.add('show');
         status.textContent = '';
@@ -462,33 +415,22 @@
 
     document.getElementById('searchBtn').addEventListener('click', () => {
       const pedido = document.getElementById('pedidoInput').value.trim();
-      if (!pedido) {
-        document.getElementById('status').textContent = '️ Digite um número de pedido.';
-        return;
-      }
+      if (!pedido) { document.getElementById('status').textContent = '⚠️ Digite um número de pedido.'; return; }
       document.getElementById('status').innerHTML = '<span class="spinner"></span>Consultando...';
       setTimeout(() => {
         const order = searchOrder(pedido);
         renderOrder(order);
-        if (order) {
-          document.getElementById('status').textContent = `✅ Pedido ${pedido} encontrado!`;
-        } else {
-          document.getElementById('status').textContent = `❌ Pedido ${pedido} não encontrado.`;
-        }
+        document.getElementById('status').textContent = order ? `✅ Pedido ${pedido} encontrado!` : `❌ Pedido ${pedido} não encontrado.`;
       }, 300);
     });
 
-    document.getElementById('pedidoInput').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') document.getElementById('searchBtn').click();
-    });
-
+    document.getElementById('pedidoInput').addEventListener('keypress', e => { if (e.key === 'Enter') document.getElementById('searchBtn').click(); });
     document.getElementById('clearBtn').addEventListener('click', () => {
       document.getElementById('pedidoInput').value = '';
       document.getElementById('results').innerHTML = '';
       document.getElementById('status').textContent = '';
       document.getElementById('pedidoInput').focus();
     });
-
     document.getElementById('logoutBtn').addEventListener('click', doLogout);
 
     window.addEventListener('DOMContentLoaded', async () => {
@@ -496,21 +438,14 @@
       if (saved) {
         try {
           const session = JSON.parse(saved);
-          if (Date.now() - session.timestamp < 24 * 60 * 60 * 1000) {
+          if (Date.now() - session.timestamp < 24*60*60*1000) {
             currentUser = { depositante: session.depositante };
-            
             if (session.logo && session.logo.trim() !== '') {
               const logoImg = document.getElementById('headerLogo');
-              logoImg.src = session.logo;
-              logoImg.style.display = 'block';
+              logoImg.src = session.logo; logoImg.style.display = 'block';
             }
-            
             const ok = await loadBaseData();
-            if (ok) {
-              document.getElementById('userDepositante').textContent = session.depositante;
-              showScreen('appScreen');
-              return;
-            }
+            if (ok) { document.getElementById('userDepositante').textContent = session.depositante; showScreen('appScreen'); return; }
           }
           localStorage.removeItem('luft_user_session');
         } catch(e) { console.log('Sessão inválida', e); }

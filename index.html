@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meus Pedidos - Luft Solutions</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+      font-family: 'Segoe UI', Arial, sans-serif; 
+      background: #f0f2f5;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .container { 
+      background: white; border-radius: 16px; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+      padding: 2rem; max-width: 800px; width: 100%; 
+    }
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Login */
+    .logo { text-align: center; margin-bottom: 2rem; }
+    .logo h1 { color: #1e3c72; font-size: 1.8rem; }
+    .logo p { color: #666; font-size: 0.95rem; margin-top: 0.3rem; }
+    
+    .form-group { margin-bottom: 1.3rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600; }
+    .form-group input { 
+      width: 100%; padding: 14px; border: 2px solid #ddd; 
+      border-radius: 8px; font-size: 1rem; transition: all 0.3s;
+    }
+    .form-group input:focus { border-color: #1e3c72; outline: none; box-shadow: 0 0 0 3px rgba(30,60,114,0.1); }
+    
+    .btn { 
+      width: 100%; padding: 14px; background: #1e3c72; color: white; 
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; 
+      cursor: pointer; transition: background 0.3s;
+    }
+    .btn:hover { background: #162e5a; }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
+    
+    .error { 
+      background: #fef2f2; color: #dc2626; padding: 12px; 
+      border-radius: 8px; margin-bottom: 1rem; display: none; text-align: center; font-weight: 500;
+    }
+    .error.show { display: block; animation: shake 0.3s; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    
+    /* App Principal */
+    .app-header { 
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 1rem; border-bottom: 2px solid #eee; margin-bottom: 1.5rem;
+      gap: 1rem;
+    }
+    .header-left {
+      display: flex; align-items: center; gap: 1rem; flex: 1;
+    }
+    .company-logo {
+      max-height: 60px;
+      max-width: 150px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .header-text h2 { 
+      color: #1e3c72; font-size: 1.4rem; margin-bottom: 0.3rem;
+    }
+    .user-info { font-size: 0.85rem; color: #666; }
+    .user-info strong { color: #1e3c72; }
+    
+    .search-box { 
+      display: flex; gap: 8px; margin-bottom: 1.5rem; 
+      background: #fff; padding: 1rem; border-radius: 12px; 
+      border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .search-box input { flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.95rem; }
+    .search-box .btn { width: auto; padding: 12px 24px; }
+    
+    .status-msg { text-align: center; color: #666; font-size: 0.9rem; margin: 1rem 0; }
+    
+    /* Cards */
+    .order-card { 
+      background: #f8fafc; border-radius: 16px; padding: 0; 
+      overflow: hidden; border: 1px solid #e2e8f0;
+    }
+    
+    .order-header { 
+      display: flex; justify-content: space-between; align-items: center; 
+      padding: 1.2rem 1.5rem; 
+      border-bottom: 2px solid #1e3c72; background: #fff;
+    }
+    .order-header h3 { 
+      color: #1e3c72; font-size: 1.3rem; display: flex; align-items: center; gap: 8px;
+    }
+    .order-badge { 
+      background: #1e3c72; color: white; padding: 6px 16px; 
+      border-radius: 20px; font-size: 0.85rem; font-weight: 600;
+    }
+    
+    .order-grid { 
+      padding: 1.2rem;
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px; 
+    }
+    
+    .order-field { 
+      background: white; padding: 12px; border-radius: 8px; 
+      border-left: 4px solid #1e3c72; 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    .order-field label { 
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.75rem; color: #666; text-transform: uppercase; 
+      font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px;
+    }
+    
+    .order-field .value { 
+      font-size: 1rem; color: #1e3c72; font-weight: 700; 
+    }
+    .order-field .value.empty { color: #999; font-style: italic; }
+    
+    .logout-btn { 
+      background: #ef4444; padding: 8px 16px; font-size: 0.9rem; border-radius: 6px; 
+      color: white; border: none; cursor: pointer; transition: background 0.3s;
+      white-space: nowrap;
+    }
+    .logout-btn:hover { background: #dc2626; }
+    
+    .loading { text-align: center; padding: 2rem; color: #1e3c72; }
+    .spinner { 
+      display: inline-block; width: 20px; height: 20px; 
+      border: 3px solid rgba(30,60,114,0.2); border-radius: 50%; 
+      border-top-color: #1e3c72; animation: spin 0.8s linear infinite; 
+      vertical-align: middle; margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    .empty-state { 
+      text-align: center; padding: 3rem 1rem; color: #999; 
+      background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1;
+    }
+    .empty-state h4 { color: #666; margin: 1rem 0 0.5rem; }
+    
+    @media (max-width: 900px) {
+      .order-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .order-grid { grid-template-columns: 1fr; }
+      .container { padding: 1.5rem; }
+      .search-box { flex-direction: column; }
+      .search-box .btn { width: 100%; }
+      .app-header { flex-direction: column; align-items: flex-start; }
+      .header-left { flex-direction: column; align-items: flex-start; }
+      .company-logo { max-height: 40px; max-width: 120px; }
+      .logout-btn { width: 100%; margin-top: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- 🔐 TELA DE LOGIN -->
+    <div id="loginScreen" class="screen active">
+      <div class="logo">
+        <h1> Luft Solutions</h1>
+        <p>Consulta de Pedidos</p>
+      </div>
+      
+      <div id="loginError" class="error">❌ Senha inválida!</div>
+      
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="passwordInput">Senha de Acesso</label>
+          <input type="password" id="passwordInput" required placeholder="Digite sua senha" autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn" id="loginBtn"> Acessar Pedidos</button>
+      </form>
+      <div id="loginStatus" style="text-align:center;margin-top:1rem;color:#666;font-size:0.9rem;"></div>
+    </div>
+
+    <!-- 📋 TELA PRINCIPAL -->
+    <div id="appScreen" class="screen">
+      <div class="app-header">
+        <div class="header-left">
+          <img id="headerLogo" src="" alt="Logo" class="company-logo" style="display: none;">
+          <div class="header-text">
+            <h2>📦 Meus Pedidos</h2>
+            <div class="user-info">
+              Depositante: <strong id="userDepositante">Carregando...</strong>
+            </div>
+          </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Sair</button>
+      </div>
+      
+      <div class="search-box">
+        <input type="text" id="pedidoInput" placeholder="Digite o número do pedido para consultar..." />
+        <button class="btn" id="searchBtn">🔍 Consultar</button>
+      </div>
+      
+      <div id="status" class="status-msg"></div>
+      <div id="results"></div>
+      
+      <button class="btn" id="clearBtn" style="margin-top:1rem;background:#6c757d;">🔄 Nova Consulta</button>
+    </div>
+
+  </div>
+
+  <script>
+    // ✅ URLs PUBLICADAS - FUNCIONAM NO NETLIFY
+    const SHEET_AUTH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQgl3gsEFHBNGji541Z3HWLjK5ef9Rrc1ZN0QZzp90UI3Y5sPu53PrC8v0cygPTgTApTxLrQE_suvhz/pub?gid=789116722&single=true&output=csv';
+    const SHEET_BASE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQgl3gsEFHBNGji541Z3HWLjK5ef9Rrc1ZN0QZzp90UI3Y5sPu53PrC8v0cygPTgTApTxLrQE_suvhz/pub?gid=0&single=true&output=csv';
+
+    let baseData = [];
+    let currentUser = null;
+    let logoUrl = '';
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n').filter(l => l.trim());
+      if (lines.length < 2) return [];
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      const data = [];
+      for (let i = 1; i < lines.length; i++) {
+        const values = lines[i].split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+        const row = {};
+        headers.forEach((h, idx) => { row[h] = values[idx] || ''; });
+        data.push(row);
+      }
+      return data;
+    }
+
+    async function validatePassword(password) {
+      try {
+        const response = await fetch(SHEET_AUTH_URL);
+        if (!response.ok) throw new Error('Falha na autenticação');
+        const csvText = await response.text();
+        const data = parseCSV(csvText);
+        
+        const user = data.find(row => {
+          const senhaPlanilha = (row['senha'] || '').trim();
+          const senhaDigitada = password.trim();
+          return senhaPlanilha === senhaDigitada;
+        });
+        
+        if (user) {
+          logoUrl = (user['Logo Tipo'] || '').trim();
+          return { 
+            depositante: (user['Depositante'] || '').trim(), 
+            senha: password,
+            logo: logoUrl
+          };
+        }
+        return null;
+      } catch (err) {
+        console.error('Erro auth:', err);
+        return null;
+      }
+    }
+
+    async function loadBaseData() {
+      try {
+        const response = await fetch(SHEET_BASE_URL);
+        if (!response.ok) throw new Error('Erro ao carregar base');
+        const csvText = await response.text();
+        baseData = parseCSV(csvText);
+        console.log('✅ Base carregada:', baseData.length, 'registros');
+        return true;
+      } catch (err) {
+        console.error('❌ Erro load base:', err);
+        return false;
+      }
+    }
+
+    function searchOrder(pedidoNumber) {
+      if (!currentUser) return null;
+      return baseData.find(row => {
+        const matchDepositante = (row['Depositante'] || '').trim() === (currentUser.depositante || '').trim();
+        const matchPedido = (row['Pedido'] || '').trim().toLowerCase() === pedidoNumber.trim().toLowerCase();
+        return matchDepositante && matchPedido;
+      });
+    }
+
+    function formatDateTime(value) {
+      if (!value || value === '') return null;
+      if (/\d{2}\/\d{2}\/\d{4}/.test(value)) return value;
+      return value;
+    }
+
+    function renderOrder(order) {
+      const container = document.getElementById('results');
+      if (!order) {
+        container.innerHTML = `<div class="empty-state"><h4>😕 Pedido não encontrado</h4><p>Verifique o número e tente novamente.</p></div>`;
+        return;
+      }
+
+      const fields = [
+        { key: 'Status NF', label: 'Status NF', icon: '📄' },
+        { key: 'Qtde SKUs', label: 'Qtde SKUs', icon: '' },
+        { key: 'Qtde Peças', label: 'Qtde Peças', icon: '' },
+        { key: 'Qtde Volumes', label: 'Qtde Volumes', icon: '📮' },
+        { key: 'Importado Em', label: 'Importado Em', icon: '📥', format: 'datetime' },
+        { key: 'Onda Gerada Em', label: 'Onda Gerada Em', icon: '🌊', format: 'datetime' },
+        { key: '% Separado', label: '% Separado', icon: '📊' },
+        { key: 'Separado Em', label: 'Separado Em', icon: '✅', format: 'datetime' },
+        { key: '% Conferido', label: '% Conferido', icon: '📊' },
+        { key: 'Conferido Em', label: 'Conferido Em', icon: '✔️', format: 'datetime' },
+        { key: 'Pesado Em', label: 'Pesado Em', icon: '⚖️', format: 'datetime' },
+        { key: 'Faturado Em', label: 'Faturado Em', icon: '💰', format: 'datetime' },
+        { key: 'Status', label: 'Status Geral', icon: '🚚' },
+        { key: 'Expedido Em', label: 'Expedido Em', icon: '📤', format: 'datetime' }
+      ];
+
+      let html = `
+        <div class="order-card">
+          <div class="order-header">
+            <h3> Pedido ${order['Pedido'] || 'N/A'}</h3>
+            <div class="order-badge">${order['Depositante'] || ''}</div>
+          </div>
+          <div class="order-grid">
+      `;
+
+      fields.forEach(field => {
+        let value = (order[field.key] || '-').trim();
+        if (field.format === 'datetime' && value !== '-') {
+          value = formatDateTime(value) || '-';
+        }
+        const hasValue = value && value !== '-';
+        
+        html += `
+          <div class="order-field">
+            <label>${field.icon} ${field.label}</label>
+            <div class="value ${hasValue ? '' : 'empty'}">${value}</div>
+          </div>
+        `;
+      });
+
+      html += '</div></div>';
+      container.innerHTML = html;
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function doLogout() {
+      currentUser = null;
+      baseData = [];
+      logoUrl = '';
+      localStorage.removeItem('luft_user_session');
+      document.getElementById('passwordInput').value = '';
+      document.getElementById('pedidoInput').value = '';
+      document.getElementById('loginError').classList.remove('show');
+      document.getElementById('results').innerHTML = '';
+      document.getElementById('status').textContent = '';
+      document.getElementById('headerLogo').style.display = 'none';
+      showScreen('loginScreen');
+      document.getElementById('passwordInput').focus();
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const password = document.getElementById('passwordInput').value;
+      const btn = document.getElementById('loginBtn');
+      const status = document.getElementById('loginStatus');
+      
+      document.getElementById('loginError').classList.remove('show');
+      btn.disabled = true;
+      status.innerHTML = '<span class="spinner"></span>Verificando senha...';
+      
+      const user = await validatePassword(password);
+      
+      if (user) {
+        currentUser = user;
+        localStorage.setItem('luft_user_session', JSON.stringify({ 
+          depositante: user.depositante, 
+          logo: user.logo,
+          timestamp: Date.now() 
+        }));
+        
+        status.textContent = '✅ Autenticado! Carregando pedidos...';
+        
+        const logoImg = document.getElementById('headerLogo');
+        if (user.logo && user.logo.trim() !== '') {
+          logoImg.src = user.logo;
+          logoImg.style.display = 'block';
+        } else {
+          logoImg.style.display = 'none';
+        }
+        
+        const ok = await loadBaseData();
+        if (ok) {
+          document.getElementById('userDepositante').textContent = user.depositante;
+          document.getElementById('pedidoInput').focus();
+          showScreen('appScreen');
+        } else {
+          status.textContent = '⚠️ Erro ao carregar base.';
+          btn.disabled = false;
+        }
+      } else {
+        document.getElementById('loginError').classList.add('show');
+        status.textContent = '';
+        btn.disabled = false;
+      }
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const pedido = document.getElementById('pedidoInput').value.trim();
+      if (!pedido) {
+        document.getElementById('status').textContent = '⚠️ Digite um número de pedido.';
+        return;
+      }
+      document.getElementById('status').innerHTML = '<span class="spinner"></span>Consultando...';
+      setTimeout(() => {
+        const order = searchOrder(pedido);
+        renderOrder(order);
+        if (order) {
+          document.getElementById('status').textContent = `✅ Pedido ${pedido} encontrado!`;
+        } else {
+          document.getElementById('status').textContent = `❌ Pedido ${pedido} não encontrado.`;
+        }
+      }, 300);
+    });
+
+    document.getElementById('pedidoInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') document.getElementById('searchBtn').click();
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      document.getElementById('pedidoInput').value = '';
+      document.getElementById('results').innerHTML = '';
+      document.getElementById('status').textContent = '';
+      document.getElementById('pedidoInput').focus();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', doLogout);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      const saved = localStorage.getItem('luft_user_session');
+      if (saved) {
+        try {
+          const session = JSON.parse(saved);
+          if (Date.now() - session.timestamp < 24 * 60 * 60 * 1000) {
+            currentUser = { depositante: session.depositante };
+            
+            if (session.logo && session.logo.trim() !== '') {
+              const logoImg = document.getElementById('headerLogo');
+              logoImg.src = session.logo;
+              logoImg.style.display = 'block';
+            }
+            
+            const ok = await loadBaseData();
+            if (ok) {
+              document.getElementById('userDepositante').textContent = session.depositante;
+              showScreen('appScreen');
+              return;
+            }
+          }
+          localStorage.removeItem('luft_user_session');
+        } catch(e) { console.log('Sessão inválida', e); }
+      }
+      document.getElementById('passwordInput').focus();
+    });
+  </script>
+</body>
+</html>

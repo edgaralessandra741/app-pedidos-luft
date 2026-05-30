@@ -15,24 +15,53 @@
     .container { 
       background: white; border-radius: 16px; 
       box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
-      padding: 2rem; max-width: 800px; width: 100%; 
+      padding: 2rem; max-width: 500px; width: 100%; 
     }
     .screen { display: none; }
     .screen.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
     /* Login */
-    .logo { text-align: center; margin-bottom: 2rem; }
-    .logo h1 { color: #1e3c72; font-size: 1.8rem; }
-    .logo p { color: #666; font-size: 0.95rem; margin-top: 0.3rem; }
+    .logo { 
+      text-align: center; 
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .logo-img {
+      max-width: 120px;
+      max-height: 120px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+    .logo h1 { 
+      color: #1e3c72; 
+      font-size: 1.8rem;
+      margin: 0;
+    }
+    .logo p { 
+      color: #666; 
+      font-size: 0.95rem; 
+      margin: 0;
+    }
     
-    .form-group { margin-bottom: 1.3rem; }
+    .form-group { margin-bottom: 1.5rem; }
     .form-group label { display: block; margin-bottom: 0.5rem; color: #333; font-weight: 600; }
     .form-group input { 
       width: 100%; padding: 14px; border: 2px solid #ddd; 
       border-radius: 8px; font-size: 1rem; transition: all 0.3s;
     }
     .form-group input:focus { border-color: #1e3c72; outline: none; box-shadow: 0 0 0 3px rgba(30,60,114,0.1); }
+    
+    /* Estilo da instrução abaixo da senha */
+    .login-hint {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: #000;
+      font-weight: 500;
+    }
     
     .btn { 
       width: 100%; padding: 14px; background: #1e3c72; color: white; 
@@ -157,6 +186,7 @@
       .header-left { flex-direction: column; align-items: flex-start; }
       .company-logo { max-height: 40px; max-width: 120px; }
       .logout-btn { width: 100%; margin-top: 0.5rem; }
+      .logo-img { max-width: 100px; max-height: 100px; }
     }
   </style>
 </head>
@@ -166,7 +196,9 @@
     <!-- 🔐 TELA DE LOGIN -->
     <div id="loginScreen" class="screen active">
       <div class="logo">
-        <h1> Luft Solutions</h1>
+        <!-- ✅ LOGO DA LUFT SOLUTIONS -->
+        <img src="https://i.ibb.co/d4F0rY97/luft-solutions-logo.jpg" alt="Luft Solutions" class="logo-img">
+        <h1>Luft Solutions</h1>
         <p>Consulta de Pedidos</p>
       </div>
       
@@ -176,17 +208,18 @@
         <div class="form-group">
           <label for="passwordInput">Senha de Acesso</label>
           <input type="password" id="passwordInput" required placeholder="Digite sua senha" autocomplete="current-password">
+          <p class="login-hint">Senha e os 5 primeiro número do CNPJ Ex: 76512</p>
         </div>
         <button type="submit" class="btn" id="loginBtn"> Acessar Pedidos</button>
       </form>
       <div id="loginStatus" style="text-align:center;margin-top:1rem;color:#666;font-size:0.9rem;"></div>
     </div>
 
-    <!-- 📋 TELA PRINCIPAL -->
+    <!--  TELA PRINCIPAL -->
     <div id="appScreen" class="screen">
       <div class="app-header">
         <div class="header-left">
-          <img id="headerLogo" src="" alt="Logo" class="company-logo" style="display: none;">
+          <img id="headerLogo" src="" alt="Logo" class="company-logo" style="display: none;" onerror="this.style.display='none'">
           <div class="header-text">
             <h2>📦 Meus Pedidos</h2>
             <div class="user-info">
@@ -205,19 +238,23 @@
       <div id="status" class="status-msg"></div>
       <div id="results"></div>
       
-      <button class="btn" id="clearBtn" style="margin-top:1rem;background:#6c757d;">🔄 Nova Consulta</button>
+      <button class="btn" id="clearBtn" style="margin-top:1rem;background:#6c757d;"> Nova Consulta</button>
     </div>
 
   </div>
 
   <script>
-    // ✅ URLs PUBLICADAS - FUNCIONAM NO NETLIFY
     const SHEET_AUTH_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQgl3gsEFHBNGji541Z3HWLjK5ef9Rrc1ZN0QZzp90UI3Y5sPu53PrC8v0cygPTgTApTxLrQE_suvhz/pub?gid=789116722&single=true&output=csv';
     const SHEET_BASE_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQgl3gsEFHBNGji541Z3HWLjK5ef9Rrc1ZN0QZzp90UI3Y5sPu53PrC8v0cygPTgTApTxLrQE_suvhz/pub?gid=0&single=true&output=csv';
 
     let baseData = [];
     let currentUser = null;
     let logoUrl = '';
+
+    const LISTA_CNPJ = {
+      "EDITORA MUNDO CRISTÃO": "78524",
+      "ASSOCIACAO CULTURA INGLESA - SP": "12345",
+    };
 
     function parseCSV(text) {
       const lines = text.trim().split('\n').filter(l => l.trim());
@@ -231,6 +268,22 @@
         data.push(row);
       }
       return data;
+    }
+
+    function formatLogoUrl(url) {
+      if (!url) return '';
+      url = url.trim();
+      if (url.includes('imgbb.com')) {
+        const match = url.match(/imgbb\.com\/([a-zA-Z0-9]+)/);
+        if (match) return `https://i.ibb.co/${match[1]}/logo.png`;
+      }
+      const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)|id=([a-zA-Z0-9_-]+)/);
+      if (driveMatch) {
+        const fileId = driveMatch[1] || driveMatch[2];
+        return `https://drive.google.com/uc?export=view&id=${fileId}`;
+      }
+      if (!url.startsWith('http')) url = 'https://' + url;
+      return url;
     }
 
     async function validatePassword(password) {
@@ -247,7 +300,7 @@
         });
         
         if (user) {
-          logoUrl = (user['Logo Tipo'] || '').trim();
+          logoUrl = formatLogoUrl(user['Logo Tipo'] || '');
           return { 
             depositante: (user['Depositante'] || '').trim(), 
             senha: password,
@@ -267,10 +320,9 @@
         if (!response.ok) throw new Error('Erro ao carregar base');
         const csvText = await response.text();
         baseData = parseCSV(csvText);
-        console.log('✅ Base carregada:', baseData.length, 'registros');
         return true;
       } catch (err) {
-        console.error('❌ Erro load base:', err);
+        console.error(' Erro load base:', err);
         return false;
       }
     }
@@ -293,16 +345,16 @@
     function renderOrder(order) {
       const container = document.getElementById('results');
       if (!order) {
-        container.innerHTML = `<div class="empty-state"><h4>😕 Pedido não encontrado</h4><p>Verifique o número e tente novamente.</p></div>`;
+        container.innerHTML = `<div class="empty-state"><h4> Pedido não encontrado</h4><p>Verifique o número e tente novamente.</p></div>`;
         return;
       }
 
       const fields = [
-        { key: 'Status NF', label: 'Status NF', icon: '📄' },
+        { key: 'Status NF', label: 'Status NF', icon: '📋' },
         { key: 'Qtde SKUs', label: 'Qtde SKUs', icon: '' },
-        { key: 'Qtde Peças', label: 'Qtde Peças', icon: '' },
-        { key: 'Qtde Volumes', label: 'Qtde Volumes', icon: '📮' },
-        { key: 'Importado Em', label: 'Importado Em', icon: '📥', format: 'datetime' },
+        { key: 'Qtde Peças', label: 'Qtde Peças', icon: '📚' },
+        { key: 'Qtde Volumes', label: 'Qtde Volumes', icon: '📦' },
+        { key: 'Importado Em', label: 'Importado Em', icon: '⌛', format: 'datetime' },
         { key: 'Onda Gerada Em', label: 'Onda Gerada Em', icon: '🌊', format: 'datetime' },
         { key: '% Separado', label: '% Separado', icon: '📊' },
         { key: 'Separado Em', label: 'Separado Em', icon: '✅', format: 'datetime' },
@@ -310,8 +362,8 @@
         { key: 'Conferido Em', label: 'Conferido Em', icon: '✔️', format: 'datetime' },
         { key: 'Pesado Em', label: 'Pesado Em', icon: '⚖️', format: 'datetime' },
         { key: 'Faturado Em', label: 'Faturado Em', icon: '💰', format: 'datetime' },
-        { key: 'Status', label: 'Status Geral', icon: '🚚' },
-        { key: 'Expedido Em', label: 'Expedido Em', icon: '📤', format: 'datetime' }
+        { key: 'Status', label: 'Status Geral', icon: '' },
+        { key: 'Expedido Em', label: 'Expedido Em', icon: '🚚', format: 'datetime' }
       ];
 
       let html = `
@@ -411,7 +463,7 @@
     document.getElementById('searchBtn').addEventListener('click', () => {
       const pedido = document.getElementById('pedidoInput').value.trim();
       if (!pedido) {
-        document.getElementById('status').textContent = '⚠️ Digite um número de pedido.';
+        document.getElementById('status').textContent = '️ Digite um número de pedido.';
         return;
       }
       document.getElementById('status').innerHTML = '<span class="spinner"></span>Consultando...';
